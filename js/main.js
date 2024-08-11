@@ -1,5 +1,6 @@
-import { generatePhotos } from './data.js';
 import { renderGallery } from './gallery.js';
+import { getData } from './api.js';
 import './upload-form.js';
 
-renderGallery(generatePhotos());
+getData(renderGallery);
+
