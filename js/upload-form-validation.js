@@ -1,13 +1,7 @@
 const COMMENT_MAX_LENGTH = 140;
 const MAX_HASHTAGS = 5;
 
-const setupValidation = (form, hashtagsField, commentsField) => {
-
-  const pristine = new Pristine(form, {
-    classTo: 'img-upload__field-wrapper',
-    errorTextParent: 'img-upload__field-wrapper',
-    errorTextClass: 'img-upload__field-wrapper--error',
-  });
+const setupValidation = (form, hashtagsField, commentsField, pristine) => {
 
   const hasUniqueHashtags = (hashtagsArray) => {
     const hashtagsCopy = hashtagsArray.slice();
@@ -61,16 +55,6 @@ const setupValidation = (form, hashtagsField, commentsField) => {
     validateComment,
     getCommentsErrorMessage()
   );
-
-  form.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    pristine.validate();
-    // if (pristine.validate()) {
-    //   console.log('Форма отправлена');
-    // } else {
-    //   console.log('Форма не отправлена');
-    // }
-  });
 
 };
 
