@@ -7,7 +7,10 @@ const getData = (onSuccess) => fetch('https://32.javascript.htmlacademy.pro/keks
     }
     return response.json();
   })
-  .then((result) => onSuccess(result))
+  .then((result) => {
+    onSuccess(result);
+    return result;
+  })
   .catch(() => {
     showDataLoadError();
   });
