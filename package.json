@@ -23,8 +23,5 @@
   "engines": {
     "node": "18",
     "npm": "9"
-  },
-  "dependencies": {
-    "pristinejs": "^1.1.0"
   }
 }
