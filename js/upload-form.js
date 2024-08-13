@@ -12,6 +12,8 @@ const uploadSubmitButton = document.querySelector('.img-upload__submit');
 const hashtagsField = uploadForm.querySelector('.text__hashtags');
 const commentsField = uploadForm.querySelector('.text__description');
 
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
@@ -46,14 +48,17 @@ function closeUploadOverlay () {
 
 const showSelectedPicture = (evt) => {
   const selectedFile = evt.target.files[0];
+  const fileName = selectedFile.name.toLowerCase();
   const imgPreview = document.querySelector('.img-upload__preview > img');
   const reader = new FileReader();
+
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
 
   reader.onloadend = function () {
     imgPreview.src = reader.result;
   };
 
-  if (selectedFile) {
+  if (selectedFile && matches) {
     reader.readAsDataURL(selectedFile);
   }
 };
