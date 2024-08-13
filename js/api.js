@@ -15,18 +15,18 @@ const getData = (onSuccess) => fetch('https://32.javascript.htmlacademy.pro/keks
     showDataLoadError();
   });
 
-const sendData = (body) => fetch('https://32.javascript.htmlacademy.pro/kekstagram', {
+const sendData = (formData) => fetch('https://32.javascript.htmlacademy.pro/kekstagram', {
   method: 'POST',
-  body
+  body: formData
 }).then((response) => {
   if (!response.ok) {
     throw new Error();
+  } else {
+    showSuccessPopup();
   }
   return response.json();
 }).catch(() => {
   showDataSendError();
-}).then (() => {
-  showSuccessPopup();
 });
 
 export { getData, sendData };

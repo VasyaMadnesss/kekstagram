@@ -5,6 +5,9 @@ const container = document.querySelector('.pictures');
 
 const renderGallery = (pictures) => {
 
+  while (document.querySelector('.picture')) {
+    document.querySelector('.picture').remove();
+  }
   renderThumbnails(pictures, container);
 
   container.addEventListener('click', (evt) => {
