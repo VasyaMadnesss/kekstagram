@@ -6,6 +6,7 @@ import { sendData } from './api.js';
 const uploadButton = document.querySelector('.img-upload__input');
 const uploadOverlay = document.querySelector('.img-upload__overlay');
 const overlayCloseButton = document.querySelector('.img-upload__cancel');
+const effectsPreview = document.querySelectorAll('.effects__preview');
 
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadSubmitButton = document.querySelector('.img-upload__submit');
@@ -50,16 +51,15 @@ const showSelectedPicture = (evt) => {
   const selectedFile = evt.target.files[0];
   const fileName = selectedFile.name.toLowerCase();
   const imgPreview = document.querySelector('.img-upload__preview > img');
-  const reader = new FileReader();
 
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
 
-  reader.onloadend = function () {
-    imgPreview.src = reader.result;
-  };
-
   if (selectedFile && matches) {
-    reader.readAsDataURL(selectedFile);
+    imgPreview.src = URL.createObjectURL(selectedFile);
+  }
+
+  for (const effect of effectsPreview) {
+    effect.style.backgroundImage = `url('${imgPreview.src}')`;
   }
 };
 
@@ -88,10 +88,10 @@ const unblockSubmitButton = () => {
 const setUploadFormSubmit = (form) => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    blockSubmitButton();
     pristine.validate();
     if (pristine.validate()) {
-      sendData(new FormData(evt.target))
+      blockSubmitButton();
+      sendData(new FormData(uploadForm))
         .finally(unblockSubmitButton);
     }
   });

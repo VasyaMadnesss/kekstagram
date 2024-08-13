@@ -52,23 +52,24 @@ const SLIDER_OPTIONS = {
 };
 
 let currentEffect = 'none';
-let sliderInitialized = false;
+let isSliderInitialized = false;
 
 
 const initializeSlider = () => {
   effectLevelField.classList.add('hidden');
-  if (!sliderInitialized) {
+  if (!isSliderInitialized) {
     noUiSlider.create(sliderElement, SLIDER_OPTIONS[currentEffect]);
-    sliderInitialized = true;
+    isSliderInitialized = true;
   }
 
   sliderElement.noUiSlider.on('update', () => {
-    const value = Number(sliderElement.noUiSlider.get()).toFixed(1);
-    effectValue.value = value;
+    const value = Number(sliderElement.noUiSlider.get());
+    effectValue.value = value % 1 === 0 ? value.toFixed(0) : value.toFixed(1);
     effectedImg.style.filter = PICTURE_EFFECTS[currentEffect](value);
   });
 
   effectsList.addEventListener('change', applyEffect);
+
 };
 
 
@@ -92,12 +93,12 @@ function applyEffect (evt) {
 }
 
 const destroySlider = () => {
-  if (sliderInitialized) {
+  if (isSliderInitialized) {
     sliderElement.noUiSlider.destroy();
     currentEffect = 'none';
-    sliderInitialized = false;
+    isSliderInitialized = false;
     effectsList.removeEventListener('change', applyEffect);
   }
 };
 
-export { applyEffect, initializeSlider, destroySlider };
+export { initializeSlider, destroySlider };

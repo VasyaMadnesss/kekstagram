@@ -25,7 +25,7 @@ const scaleUp = () => {
 };
 
 const initializeScale = () => {
-  scaleValueField.value = DEFAULT_VALUE;
+  scaleValueField.value = `${DEFAULT_VALUE}%`;
   scaledImage.style.transform = 'scale(1)';
   scaleMinusButton.addEventListener('click', scaleDown);
   scalePlusButton.addEventListener('click', scaleUp);
