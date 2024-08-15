@@ -1,6 +1,9 @@
-import { showDataLoadError, showDataSendError, showSuccessPopup } from './popups';
+const ADDRESSES = {
+  post: 'https://32.javascript.htmlacademy.pro/kekstagram',
+  get: 'https://32.javascript.htmlacademy.pro/kekstagram/data'
+};
 
-const getData = (onSuccess) => fetch('https://32.javascript.htmlacademy.pro/kekstagram/data')
+const getData = (onSuccess, onFail) => fetch(ADDRESSES.get)
   .then((response) => {
     if (!response.ok) {
       throw new Error();
@@ -12,21 +15,19 @@ const getData = (onSuccess) => fetch('https://32.javascript.htmlacademy.pro/keks
     return result;
   })
   .catch(() => {
-    showDataLoadError();
+    onFail();
   });
 
-const sendData = (formData) => fetch('https://32.javascript.htmlacademy.pro/kekstagram', {
-  method: 'POST',
-  body: formData
-}).then((response) => {
-  if (!response.ok) {
-    throw new Error();
-  } else {
-    showSuccessPopup();
-  }
-  return response.json();
-}).catch(() => {
-  showDataSendError();
-});
+const sendData = (formData, onSuccess, onFail) => fetch(ADDRESSES.post, { method: 'POST', body: formData })
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error();
+    } else {
+      onSuccess();
+    }
+    return response.json();
+  }).catch(() => {
+    onFail();
+  });
 
 export { getData, sendData };

@@ -2,6 +2,7 @@ import { setupValidation } from './upload-form-validation.js';
 import { initializeScale, destroyScale } from './scale.js';
 import { initializeSlider, destroySlider } from './effects.js';
 import { sendData } from './api.js';
+import { showDataSendError, showSuccessPopup } from './popups';
 
 const uploadButton = document.querySelector('.img-upload__input');
 const uploadOverlay = document.querySelector('.img-upload__overlay');
@@ -91,7 +92,7 @@ const setUploadFormSubmit = (form) => {
     pristine.validate();
     if (pristine.validate()) {
       blockSubmitButton();
-      sendData(new FormData(uploadForm))
+      sendData(new FormData(uploadForm), showSuccessPopup, showDataSendError)
         .finally(unblockSubmitButton);
     }
   });
