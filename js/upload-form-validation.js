@@ -1,7 +1,7 @@
 const COMMENT_MAX_LENGTH = 140;
 const MAX_HASHTAGS = 5;
 
-const setupValidation = (form, hashtagsField, commentsField, pristine) => {
+const setupValidation = (hashtagsField, commentsField, pristine) => {
 
   const hasUniqueHashtags = (hashtagsArray) => {
     const hashtagsCopy = hashtagsArray.slice();

@@ -1,67 +1,67 @@
-import { closeUploadOverlayOnEscapeKeydown, closeUploadOverlay } from './upload-form';
+import { onDocumentEscapeKeydown as onDocumentEscapeKeydownCloseForm, closeForm } from './upload-form';
 
-const closeDataLoadError = () => {
+const dataLoadErrorTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
+const dataSendErrorTemplate = document.querySelector('#error').content.querySelector('.error');
+const successPopupTemplate = document.querySelector('#success').content.querySelector('.success');
+
+const closeLoadError = () => {
   document.body.removeChild(document.querySelector('.data-error'));
 };
 
-const showDataLoadError = () => {
-  const dataLoadErrorTemplate = document.querySelector('#data-error').content
-    .querySelector('.data-error');
+const showLoadError = () => {
   const errorPopup = dataLoadErrorTemplate.cloneNode(true);
   const fragment = document.createDocumentFragment();
   fragment.append(errorPopup);
   document.body.append(fragment);
-  setTimeout(closeDataLoadError, 5000);
+  setTimeout(closeLoadError, 5000);
 };
 
-const closeDataSendError = () => {
-  document.querySelector('.error__button').removeEventListener('click', closeDataSendError);
+const closeSendError = () => {
+  document.querySelector('.error__button').removeEventListener('click', closeSendError);
   document.body.removeChild(document.querySelector('.error'));
-  document.removeEventListener('keydown', closeDataSendErrorOnEscape);
-  document.removeEventListener('click', closeOnClickBelowDataSendErrorPopup);
-  document.addEventListener('keydown', closeUploadOverlayOnEscapeKeydown);
+  document.removeEventListener('keydown', onDocumentEscapeKeydownCloseSendError);
+  document.removeEventListener('click', onBelowSendErrorPopupClick);
+  document.addEventListener('keydown', onDocumentEscapeKeydownCloseForm);
 };
 
-function closeDataSendErrorOnEscape (evt) {
+function onDocumentEscapeKeydownCloseSendError (evt) {
   if (evt.key === 'Escape') {
-    closeDataSendError();
+    closeSendError();
   }
 }
 
-function closeOnClickBelowDataSendErrorPopup (evt) {
+function onBelowSendErrorPopupClick (evt) {
   if (evt.target === document.querySelector('.error')) {
-    closeDataSendError();
+    closeSendError();
   }
 }
 
-const showDataSendError = () => {
-  const dataSendErrorTemplate = document.querySelector('#error').content
-    .querySelector('.error');
+const showSendError = () => {
   const errorPopup = dataSendErrorTemplate.cloneNode(true);
   const fragment = document.createDocumentFragment();
   fragment.append(errorPopup);
   document.body.append(fragment);
-  document.querySelector('.error__button').addEventListener('click', closeDataSendError);
-  document.addEventListener('keydown', closeDataSendErrorOnEscape);
-  document.addEventListener('click', closeOnClickBelowDataSendErrorPopup);
-  document.removeEventListener('keydown', closeUploadOverlayOnEscapeKeydown);
+  document.querySelector('.error__button').addEventListener('click', closeSendError);
+  document.addEventListener('keydown', onDocumentEscapeKeydownCloseSendError);
+  document.addEventListener('click', onBelowSendErrorPopupClick);
+  document.removeEventListener('keydown', onDocumentEscapeKeydownCloseForm);
 };
 
 const closeSuccessPopup = () => {
   document.querySelector('.success__button').removeEventListener('click', closeSuccessPopup);
   document.body.removeChild(document.querySelector('.success'));
-  document.removeEventListener('keydown', closeSuccessPopupOnEscape);
-  document.removeEventListener('click', closeOnClickBelowSuccessPopup);
+  document.removeEventListener('keydown', onDocumentEscapeKeydownCloseSuccessPopup);
+  document.removeEventListener('click', onBelowSuccessPopupClick);
 };
 
 
-function closeSuccessPopupOnEscape (evt) {
+function onDocumentEscapeKeydownCloseSuccessPopup (evt) {
   if (evt.key === 'Escape') {
     closeSuccessPopup();
   }
 }
 
-function closeOnClickBelowSuccessPopup (evt) {
+function onBelowSuccessPopupClick (evt) {
   if (evt.target === document.querySelector('.success')) {
     closeSuccessPopup();
   }
@@ -69,15 +69,14 @@ function closeOnClickBelowSuccessPopup (evt) {
 
 
 const showSuccessPopup = () => {
-  closeUploadOverlay();
-  const template = document.querySelector('#success').content.querySelector('.success');
-  const successPopup = template.cloneNode(true);
+  closeForm();
+  const successPopup = successPopupTemplate.cloneNode(true);
   const fragment = document.createDocumentFragment();
   fragment.append(successPopup);
   document.body.append(fragment);
   document.querySelector('.success__button').addEventListener('click', closeSuccessPopup);
-  document.addEventListener('keydown', closeSuccessPopupOnEscape);
-  document.addEventListener('click', closeOnClickBelowSuccessPopup);
+  document.addEventListener('keydown', onDocumentEscapeKeydownCloseSuccessPopup);
+  document.addEventListener('click', onBelowSuccessPopupClick);
 };
 
-export {showDataLoadError, closeDataLoadError, showDataSendError, showSuccessPopup};
+export { showLoadError, showSendError, showSuccessPopup };

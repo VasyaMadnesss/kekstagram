@@ -2,7 +2,9 @@ import { setupValidation } from './upload-form-validation.js';
 import { initializeScale, destroyScale } from './scale.js';
 import { initializeSlider, destroySlider } from './effects.js';
 import { sendData } from './api.js';
-import { showDataSendError, showSuccessPopup } from './popups';
+import { showSendError as showDataSendError, showSuccessPopup } from './popups';
+
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const uploadButton = document.querySelector('.img-upload__input');
 const uploadOverlay = document.querySelector('.img-upload__overlay');
@@ -14,27 +16,39 @@ const uploadSubmitButton = document.querySelector('.img-upload__submit');
 const hashtagsField = uploadForm.querySelector('.text__hashtags');
 const commentsField = uploadForm.querySelector('.text__description');
 
-const FILE_TYPES = ['jpg', 'jpeg', 'png'];
-
-const pristine = new Pristine(uploadForm, {
+const pristine = new Pristine (uploadForm, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
   errorTextClass: 'img-upload__field-wrapper--error',
 });
 
-function closeUploadOverlayOnEscapeKeydown (evt) {
+const onDocumentEscapeKeydown = (evt) => {
   if(evt.key === 'Escape') {
-    closeUploadOverlay();
+    closeForm();
   }
-}
+};
 
-function onInputEscapeKeydown (evt) {
+const onInputEscapeKeydown = (evt) => {
   if (evt.key === 'Escape') {
     evt.stopPropagation();
   }
-}
+};
 
-function closeUploadOverlay () {
+const removeEventListeners = () => {
+  overlayCloseButton.removeEventListener('click', closeForm);
+  document.removeEventListener('keydown', onDocumentEscapeKeydown);
+  commentsField.removeEventListener('keydown', onInputEscapeKeydown);
+  hashtagsField.removeEventListener('keydown', onInputEscapeKeydown);
+};
+
+const addEventListeners = () => {
+  overlayCloseButton.addEventListener('click', closeForm);
+  document.addEventListener('keydown', onDocumentEscapeKeydown);
+  commentsField.addEventListener('keydown', onInputEscapeKeydown);
+  hashtagsField.addEventListener('keydown', onInputEscapeKeydown);
+};
+
+function closeForm () {
   uploadForm.reset();
   pristine.reset();
   uploadOverlay.classList.add('hidden');
@@ -42,39 +56,30 @@ function closeUploadOverlay () {
   uploadButton.value = '';
   destroyScale();
   destroySlider();
-  overlayCloseButton.removeEventListener('click', closeUploadOverlay);
-  document.removeEventListener('keydown', closeUploadOverlayOnEscapeKeydown);
-  commentsField.removeEventListener('keydown', onInputEscapeKeydown);
-  hashtagsField.removeEventListener('keydown', onInputEscapeKeydown);
+  removeEventListeners();
 }
 
 const showSelectedPicture = (evt) => {
   const selectedFile = evt.target.files[0];
   const fileName = selectedFile.name.toLowerCase();
   const imgPreview = document.querySelector('.img-upload__preview > img');
-
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
-
   if (selectedFile && matches) {
     imgPreview.src = URL.createObjectURL(selectedFile);
   }
-
   for (const effect of effectsPreview) {
     effect.style.backgroundImage = `url('${imgPreview.src}')`;
   }
 };
 
-function openUploadOverlay (evt) {
+const openForm = (evt) => {
   uploadOverlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
   initializeScale();
   initializeSlider();
   showSelectedPicture(evt);
-  overlayCloseButton.addEventListener('click', closeUploadOverlay);
-  document.addEventListener('keydown', closeUploadOverlayOnEscapeKeydown);
-  commentsField.addEventListener('keydown', onInputEscapeKeydown);
-  hashtagsField.addEventListener('keydown', onInputEscapeKeydown);
-}
+  addEventListeners();
+};
 
 const blockSubmitButton = () => {
   uploadSubmitButton.disabled = true;
@@ -86,8 +91,10 @@ const unblockSubmitButton = () => {
   uploadSubmitButton.textContent = 'Опубликовать';
 };
 
-const setUploadFormSubmit = (form) => {
-  form.addEventListener('submit', (evt) => {
+const setupForm = () => {
+  uploadButton.addEventListener('change', openForm);
+  setupValidation(hashtagsField, commentsField, pristine);
+  uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     pristine.validate();
     if (pristine.validate()) {
@@ -98,9 +105,4 @@ const setUploadFormSubmit = (form) => {
   });
 };
 
-setupValidation(uploadForm, hashtagsField, commentsField, pristine);
-setUploadFormSubmit(uploadForm);
-
-uploadButton.addEventListener('change', openUploadOverlay);
-
-export { closeUploadOverlayOnEscapeKeydown, closeUploadOverlay};
+export { onDocumentEscapeKeydown, closeForm, setupForm};
