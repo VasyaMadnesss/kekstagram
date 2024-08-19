@@ -61,6 +61,21 @@ function onDocumentEscapeKeydownCloseSuccessPopup (evt) {
   }
 }
 
+
+// function setEscapeKeydownHandler (popupType) {
+//   return function (evt) {
+//     if (evt.key === 'Escape') {
+//       if (popupType === 'success') {
+//         closeSuccessPopup();
+//       }
+//       if (popupType === 'sendError') {
+//         closeSendError();
+//       }
+//     }
+//   };
+// }
+
+
 function onBelowSuccessPopupClick (evt) {
   if (evt.target === document.querySelector('.success')) {
     closeSuccessPopup();

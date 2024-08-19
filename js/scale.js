@@ -9,7 +9,7 @@ const scaleValueField = document.querySelector('.scale__control--value');
 const scaledImage = document.querySelector('.img-upload__preview > img');
 
 const scaleDown = () => {
-  const currentValue = Number(scaleValueField.value);
+  const currentValue = parseInt(scaleValueField.value, 10);
   if (currentValue > MIN_VALUE) {
     scaleValueField.value = `${currentValue - STEP}%`;
     scaledImage.style.transform = `scale(${(currentValue - STEP) / MAX_VALUE})`;
@@ -17,7 +17,7 @@ const scaleDown = () => {
 };
 
 const scaleUp = () => {
-  const currentValue = Number(scaleValueField.value);
+  const currentValue = parseInt(scaleValueField.value, 10);
   if (currentValue < MAX_VALUE) {
     scaleValueField.value = `${currentValue + STEP}%`;
     scaledImage.style.transform = `scale(${(currentValue + STEP) / MAX_VALUE})`;
