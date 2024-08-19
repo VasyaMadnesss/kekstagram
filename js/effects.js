@@ -1,12 +1,3 @@
-const PICTURE_EFFECTS = {
-  none: () => 'none',
-  chrome: (value) => `grayscale(${value})`,
-  sepia: (value) => `sepia(${value})`,
-  marvin: (value) => `invert(${value}%)`,
-  phobos: (value) => `blur(${value}px)`,
-  heat: (value) => `brightness(${value})`
-};
-
 const SLIDER_OPTIONS = {
   none: {
     range: { min: 0, max: 100 },
@@ -45,6 +36,15 @@ const SLIDER_OPTIONS = {
   }
 };
 
+const PICTURE_EFFECTS = {
+  none: () => 'none',
+  chrome: (value) => `grayscale(${value})`,
+  sepia: (value) => `sepia(${value})`,
+  marvin: (value) => `invert(${value}%)`,
+  phobos: (value) => `blur(${value}px)`,
+  heat: (value) => `brightness(${value})`
+};
+
 const effectLevelField = document.querySelector('.effect-level');
 const sliderElement = effectLevelField.querySelector('.effect-level__slider');
 const effectValue = effectLevelField.querySelector('.effect-level__value');
@@ -68,7 +68,6 @@ const initializeSlider = () => {
   });
 
   effectsList.addEventListener('change', onEffectApply);
-
 };
 
 function onEffectApply (evt) {

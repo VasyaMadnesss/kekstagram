@@ -1,8 +1,8 @@
-import { setupValidation } from './upload-form-validation.js';
+import { setupValidation } from './form-validation.js';
 import { initializeScale, destroyScale } from './scale.js';
 import { initializeSlider, destroySlider } from './effects.js';
 import { sendData } from './api.js';
-import { showSendError as showDataSendError, showSuccessPopup } from './popups';
+import { showSendError as showDataSendError, showSuccessPopup } from './popups.js';
 
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
@@ -34,15 +34,19 @@ const onInputEscapeKeydown = (evt) => {
   }
 };
 
+const onOverlayCloseButtonClick = () => {
+  closeForm();
+};
+
 const removeEventListeners = () => {
-  overlayCloseButton.removeEventListener('click', closeForm);
+  overlayCloseButton.removeEventListener('click', onOverlayCloseButtonClick);
   document.removeEventListener('keydown', onDocumentEscapeKeydown);
   commentsField.removeEventListener('keydown', onInputEscapeKeydown);
   hashtagsField.removeEventListener('keydown', onInputEscapeKeydown);
 };
 
 const addEventListeners = () => {
-  overlayCloseButton.addEventListener('click', closeForm);
+  overlayCloseButton.addEventListener('click', onOverlayCloseButtonClick);
   document.addEventListener('keydown', onDocumentEscapeKeydown);
   commentsField.addEventListener('keydown', onInputEscapeKeydown);
   hashtagsField.addEventListener('keydown', onInputEscapeKeydown);
@@ -81,6 +85,10 @@ const openForm = (evt) => {
   addEventListeners();
 };
 
+const onUploadInputChange = (evt) => {
+  openForm(evt);
+};
+
 const blockSubmitButton = () => {
   uploadSubmitButton.disabled = true;
   uploadSubmitButton.textContent = 'Публикую...';
@@ -92,7 +100,7 @@ const unblockSubmitButton = () => {
 };
 
 const setupForm = () => {
-  uploadButton.addEventListener('change', openForm);
+  uploadButton.addEventListener('change', onUploadInputChange);
   setupValidation(hashtagsField, commentsField, pristine);
   uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();

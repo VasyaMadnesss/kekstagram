@@ -21,8 +21,8 @@ const setupValidation = (hashtagsField, commentsField, pristine) => {
       return true;
     }
     const hashtags = value.trim().toLowerCase().split(/\s+/);
-    const hashtagRule = /^#[a-zа-яё0-9]{1,19}$/i;
-    if (hashtags.length <= MAX_HASHTAGS && hasUniqueHashtags(hashtags) && hashtags.every((item) => hashtagRule.test(item))) {
+    const HASHTAG_RULE = /^#[a-zа-яё0-9]{1,19}$/i;
+    if (hashtags.length <= MAX_HASHTAGS && hasUniqueHashtags(hashtags) && hashtags.every((item) => HASHTAG_RULE.test(item))) {
       return true;
     }
     return false;

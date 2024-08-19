@@ -24,14 +24,22 @@ const scaleUp = () => {
   }
 };
 
+const onScalePlusButtonClick = () => {
+  scaleUp();
+};
+
+const onScaleMinusButtonClick = () => {
+  scaleDown();
+};
+
 const addEventListeners = () => {
-  scaleMinusButton.addEventListener('click', scaleDown);
-  scalePlusButton.addEventListener('click', scaleUp);
+  scaleMinusButton.addEventListener('click', onScaleMinusButtonClick);
+  scalePlusButton.addEventListener('click', onScalePlusButtonClick);
 };
 
 const removeEventListeners = () => {
-  scaleMinusButton.removeEventListener('click', scaleDown);
-  scalePlusButton.removeEventListener('click', scaleUp);
+  scaleMinusButton.removeEventListener('click', onScaleMinusButtonClick);
+  scalePlusButton.removeEventListener('click', onScalePlusButtonClick);
 };
 
 const initializeScale = () => {

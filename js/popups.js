@@ -1,4 +1,4 @@
-import { onDocumentEscapeKeydown as onDocumentEscapeKeydownCloseForm, closeForm } from './upload-form';
+import { onDocumentEscapeKeydown as onDocumentEscapeKeydownCloseForm, closeForm } from './form';
 
 const dataLoadErrorTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
 const dataSendErrorTemplate = document.querySelector('#error').content.querySelector('.error');
@@ -19,16 +19,10 @@ const showLoadError = () => {
 const closeSendError = () => {
   document.querySelector('.error__button').removeEventListener('click', closeSendError);
   document.body.removeChild(document.querySelector('.error'));
-  document.removeEventListener('keydown', onDocumentEscapeKeydownCloseSendError);
+  document.removeEventListener('keydown', onDocumentEscapeKeydown); //onDocumentEscapeKeydownCloseSendError
   document.removeEventListener('click', onBelowSendErrorPopupClick);
   document.addEventListener('keydown', onDocumentEscapeKeydownCloseForm);
 };
-
-function onDocumentEscapeKeydownCloseSendError (evt) {
-  if (evt.key === 'Escape') {
-    closeSendError();
-  }
-}
 
 function onBelowSendErrorPopupClick (evt) {
   if (evt.target === document.querySelector('.error')) {
@@ -42,46 +36,36 @@ const showSendError = () => {
   fragment.append(errorPopup);
   document.body.append(fragment);
   document.querySelector('.error__button').addEventListener('click', closeSendError);
-  document.addEventListener('keydown', onDocumentEscapeKeydownCloseSendError);
+  document.addEventListener('keydown', onDocumentEscapeKeydown);
   document.addEventListener('click', onBelowSendErrorPopupClick);
-  document.removeEventListener('keydown', onDocumentEscapeKeydownCloseForm);
+  document.removeEventListener('keydown', onDocumentEscapeKeydownCloseForm); //onDocumentEscapeKeydownCloseForm
 };
 
 const closeSuccessPopup = () => {
   document.querySelector('.success__button').removeEventListener('click', closeSuccessPopup);
   document.body.removeChild(document.querySelector('.success'));
-  document.removeEventListener('keydown', onDocumentEscapeKeydownCloseSuccessPopup);
+  document.removeEventListener('keydown', onDocumentEscapeKeydown);
   document.removeEventListener('click', onBelowSuccessPopupClick);
 };
 
-
-function onDocumentEscapeKeydownCloseSuccessPopup (evt) {
+function onDocumentEscapeKeydown (evt) {
   if (evt.key === 'Escape') {
-    closeSuccessPopup();
+    switch (true) {
+      case document.body.contains(document.querySelector('.error')):
+        closeSendError();
+        break;
+      case document.body.contains(document.querySelector('.success')):
+        closeSuccessPopup();
+        break;
+    }
   }
 }
-
-
-// function setEscapeKeydownHandler (popupType) {
-//   return function (evt) {
-//     if (evt.key === 'Escape') {
-//       if (popupType === 'success') {
-//         closeSuccessPopup();
-//       }
-//       if (popupType === 'sendError') {
-//         closeSendError();
-//       }
-//     }
-//   };
-// }
-
 
 function onBelowSuccessPopupClick (evt) {
   if (evt.target === document.querySelector('.success')) {
     closeSuccessPopup();
   }
 }
-
 
 const showSuccessPopup = () => {
   closeForm();
@@ -90,7 +74,7 @@ const showSuccessPopup = () => {
   fragment.append(successPopup);
   document.body.append(fragment);
   document.querySelector('.success__button').addEventListener('click', closeSuccessPopup);
-  document.addEventListener('keydown', onDocumentEscapeKeydownCloseSuccessPopup);
+  document.addEventListener('keydown', onDocumentEscapeKeydown);
   document.addEventListener('click', onBelowSuccessPopupClick);
 };
 
