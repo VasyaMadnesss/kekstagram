@@ -1,18 +1,3 @@
-const effectLevelField = document.querySelector('.effect-level');
-const sliderElement = effectLevelField.querySelector('.effect-level__slider');
-const effectValue = effectLevelField.querySelector('.effect-level__value');
-const effectedImg = document.querySelector('.img-upload__preview > img');
-const effectsList = document.querySelector('.effects__list');
-
-const PICTURE_EFFECTS = {
-  none: () => 'none',
-  chrome: (value) => `grayscale(${value})`,
-  sepia: (value) => `sepia(${value})`,
-  marvin: (value) => `invert(${value}%)`,
-  phobos: (value) => `blur(${value}px)`,
-  heat: (value) => `brightness(${value})`
-};
-
 const SLIDER_OPTIONS = {
   none: {
     range: { min: 0, max: 100 },
@@ -51,39 +36,46 @@ const SLIDER_OPTIONS = {
   }
 };
 
-let currentEffect = 'none';
-let isSliderInitialized = false;
+const PICTURE_EFFECTS = {
+  none: () => 'none',
+  chrome: (value) => `grayscale(${value})`,
+  sepia: (value) => `sepia(${value})`,
+  marvin: (value) => `invert(${value}%)`,
+  phobos: (value) => `blur(${value}px)`,
+  heat: (value) => `brightness(${value})`
+};
 
+const effectLevelField = document.querySelector('.effect-level');
+const sliderElement = effectLevelField.querySelector('.effect-level__slider');
+const effectValue = effectLevelField.querySelector('.effect-level__value');
+const effectedImg = document.querySelector('.img-upload__preview > img');
+const effectsList = document.querySelector('.effects__list');
+
+let selectedEffect = 'none';
+let isSliderInitialized = false;
 
 const initializeSlider = () => {
   effectLevelField.classList.add('hidden');
   if (!isSliderInitialized) {
-    noUiSlider.create(sliderElement, SLIDER_OPTIONS[currentEffect]);
+    noUiSlider.create(sliderElement, SLIDER_OPTIONS[selectedEffect]);
     isSliderInitialized = true;
   }
-
   sliderElement.noUiSlider.on('update', () => {
     const value = Number(sliderElement.noUiSlider.get());
     effectValue.value = value % 1 === 0 ? value.toFixed(0) : value.toFixed(1);
-    effectedImg.style.filter = PICTURE_EFFECTS[currentEffect](value);
+    effectedImg.style.filter = PICTURE_EFFECTS[selectedEffect](value);
   });
-
-  effectsList.addEventListener('change', applyEffect);
-
+  effectsList.addEventListener('change', onEffectInputChange);
 };
 
-
-function applyEffect (evt) {
+function onEffectInputChange (evt) {
   const inputElement = evt.target.closest('input[type="radio"]');
-
   if (inputElement) {
     const chosenFilter = inputElement.value;
-    currentEffect = chosenFilter;
+    selectedEffect = chosenFilter;
     effectedImg.style.filter = PICTURE_EFFECTS[chosenFilter](SLIDER_OPTIONS[chosenFilter].start);
-
     sliderElement.noUiSlider.updateOptions(SLIDER_OPTIONS[chosenFilter]);
     sliderElement.noUiSlider.set(SLIDER_OPTIONS[chosenFilter].start);
-
     if (chosenFilter === 'none') {
       effectLevelField.classList.add('hidden');
     } else {
@@ -95,9 +87,9 @@ function applyEffect (evt) {
 const destroySlider = () => {
   if (isSliderInitialized) {
     sliderElement.noUiSlider.destroy();
-    currentEffect = 'none';
+    selectedEffect = 'none';
     isSliderInitialized = false;
-    effectsList.removeEventListener('change', applyEffect);
+    effectsList.removeEventListener('change', onEffectInputChange);
   }
 };
 
