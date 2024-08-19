@@ -28,20 +28,19 @@ const renderGallery = (pictures, sortingMethod = 'none') => {
 
   renderThumbnails(sortedPictures, container);
 
-  function onPicturesContainerClick (evt) {
+  const onPicturesContainerClick = (evt) => {
     const thumbnail = evt.target.closest('.picture');
     if (thumbnail) {
       evt.preventDefault();
       const picture = sortedPictures.find((pictureItem) => String(pictureItem.id) === evt.target.closest('.picture').dataset.thumbnailId);
       openBigPicture(picture);
     }
-  }
+  };
 
   if (!isPicturesRendered) {
     container.addEventListener('click', onPicturesContainerClick);
     isPicturesRendered = true;
   }
-
 };
 
 export { renderGallery };

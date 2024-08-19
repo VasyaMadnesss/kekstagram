@@ -5,8 +5,6 @@ const DEBOUNCE_TIME = 500;
 
 let selectedFilter = 'default';
 
-const renderDebounced = (data, filter) => debounce(() => renderGallery(data, filter), DEBOUNCE_TIME)();
-
 const imageFiltersElement = document.querySelector('.img-filters');
 const defaultFilterButtonElement = document.querySelector('#filter-default');
 const randomFilterButtonElement = document.querySelector('#filter-random');
@@ -18,6 +16,7 @@ const toggleActiveClass = (evt) => {
 };
 
 const setupFiltration = (receivedData) => {
+  const renderDebounced = debounce(() => renderGallery(receivedData, selectedFilter), DEBOUNCE_TIME);
   imageFiltersElement.classList.remove('img-filters--inactive');
   imageFiltersElement.addEventListener('click', (evt) => {
     switch (evt.target) {

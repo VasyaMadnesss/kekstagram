@@ -60,27 +60,22 @@ const initializeSlider = () => {
     noUiSlider.create(sliderElement, SLIDER_OPTIONS[selectedEffect]);
     isSliderInitialized = true;
   }
-
   sliderElement.noUiSlider.on('update', () => {
     const value = Number(sliderElement.noUiSlider.get());
     effectValue.value = value % 1 === 0 ? value.toFixed(0) : value.toFixed(1);
     effectedImg.style.filter = PICTURE_EFFECTS[selectedEffect](value);
   });
-
-  effectsList.addEventListener('change', onEffectApply);
+  effectsList.addEventListener('change', onEffectInputChange);
 };
 
-function onEffectApply (evt) {
+function onEffectInputChange (evt) {
   const inputElement = evt.target.closest('input[type="radio"]');
-
   if (inputElement) {
     const chosenFilter = inputElement.value;
     selectedEffect = chosenFilter;
     effectedImg.style.filter = PICTURE_EFFECTS[chosenFilter](SLIDER_OPTIONS[chosenFilter].start);
-
     sliderElement.noUiSlider.updateOptions(SLIDER_OPTIONS[chosenFilter]);
     sliderElement.noUiSlider.set(SLIDER_OPTIONS[chosenFilter].start);
-
     if (chosenFilter === 'none') {
       effectLevelField.classList.add('hidden');
     } else {
@@ -94,7 +89,7 @@ const destroySlider = () => {
     sliderElement.noUiSlider.destroy();
     selectedEffect = 'none';
     isSliderInitialized = false;
-    effectsList.removeEventListener('change', onEffectApply);
+    effectsList.removeEventListener('change', onEffectInputChange);
   }
 };
 

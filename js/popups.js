@@ -19,7 +19,7 @@ const showLoadError = () => {
 const closeSendError = () => {
   document.querySelector('.error__button').removeEventListener('click', closeSendError);
   document.body.removeChild(document.querySelector('.error'));
-  document.removeEventListener('keydown', onDocumentEscapeKeydown); //onDocumentEscapeKeydownCloseSendError
+  document.removeEventListener('keydown', onDocumentEscapeKeydown);
   document.removeEventListener('click', onBelowSendErrorPopupClick);
   document.addEventListener('keydown', onDocumentEscapeKeydownCloseForm);
 };
@@ -38,7 +38,7 @@ const showSendError = () => {
   document.querySelector('.error__button').addEventListener('click', closeSendError);
   document.addEventListener('keydown', onDocumentEscapeKeydown);
   document.addEventListener('click', onBelowSendErrorPopupClick);
-  document.removeEventListener('keydown', onDocumentEscapeKeydownCloseForm); //onDocumentEscapeKeydownCloseForm
+  document.removeEventListener('keydown', onDocumentEscapeKeydownCloseForm);
 };
 
 const closeSuccessPopup = () => {

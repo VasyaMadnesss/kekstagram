@@ -21,12 +21,10 @@ const onDocumentKeydown = (evt) => {
 
 const createComment = ({avatar, message, name}) => {
   const commentTemplate = document.querySelector('#comment').content.querySelector('.social__comment');
-
   const comment = commentTemplate.cloneNode(true);
   comment.querySelector('.social__picture').src = avatar;
   comment.querySelector('.social__text').textContent = message;
   comment.querySelector('.social__picture').alt = name;
-
   return comment;
 };
 
